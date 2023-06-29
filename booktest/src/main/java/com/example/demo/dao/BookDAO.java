@@ -136,6 +136,7 @@ public class BookDAO {
 		}
 		return re;
 	}
+	
 	public ArrayList<BookVO> findAll(){
 		String sql = "select * from book order by bookid";
 		ArrayList<BookVO> list = new ArrayList<>();

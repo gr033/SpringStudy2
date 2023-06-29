@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="book">
+  <select id="findAll" resultType="bookVO">
+    select * from book 
+   <if test="keyword != null">
+   		<if test="keyfield == 'price'">
+   			where price ${cal} #{keyword}
+   		</if>
+   		<if test="keyfield != 'price'">
+		   	where ${keyfield} like '%' || #{keyword} || '%'
+   		</if>
+   </if>
+  </select>
+  <insert id="insert" parameterType="bookVO">
+  	insert into book(bookid, bookname, publisher, price) values (#{bookid}, #{bookname}, #{publisher}, #{price})
+  </insert>
+  <select id="findByBookId" resultType="bookVO">
+    select * from book where bookid = #{bookid}
+  </select>
+  <update id="update" parameterType="bookVO">
+  update book set 
+    bookname = #{bookname},
+    publisher = #{publisher},
+    price = #{price}
+  where bookid = #{bookid}
+</update>
+<delete id="delete" parameterType="bookVo">
+	delete from book where bookid = #{bookid}
+</delete>
+</mapper>
