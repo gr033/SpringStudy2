@@ -10,6 +10,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import com.example.demo.vo.BoardVO;
+import com.example.demo.vo.MemberVO;
 
 public class DBManager {
 	public static SqlSessionFactory sqlSessionFactory;
@@ -24,10 +25,29 @@ public class DBManager {
 		}
 	}
 	
-	public static List<BoardVO> findAll(){
+	public static boolean isMember(HashMap<String, Object> map) {
+		boolean re = false;
+		SqlSession session = sqlSessionFactory.openSession();
+		MemberVO m = session.selectOne("member.findByNo", map);
+		if(m != null) {
+			re = true;
+		}
+		session.close();
+		return re;
+	}
+	
+	public static int insertMember(MemberVO m) {
+		int re = -1;
+		SqlSession session = sqlSessionFactory.openSession(true);
+		re = session.insert("member.insert", m);
+		session.close();
+		return re;
+	}
+	
+	public static List<BoardVO> findAll(HashMap<String, Object> map){
 		List<BoardVO> list = null;
 		SqlSession session = sqlSessionFactory.openSession();
-		list = session.selectList("board.findAll");
+		list = session.selectList("board.findAll", map);
 		session.close();
 		return list;
 	}
@@ -82,6 +102,14 @@ public class DBManager {
 		re = session.delete("board.delete", map);
 		session.close();
 		return re;
+	}
+	
+	public static int getTotalRecord() {
+		int n = 0;
+		SqlSession session = sqlSessionFactory.openSession();
+		n = session.selectOne("board.getTotalRecord");
+		session.close();
+		return n;
 	}
 	
 }

@@ -10,8 +10,18 @@ import com.example.demo.vo.BoardVO;
 
 @Repository
 public class BoardDAO {
-	public List<BoardVO> findAll(){
-		return DBManager.findAll();
+	//전체 레코드의 수
+	public static int totalRecord;
+	//전체 페이지의 수
+	public static int totalPage;
+	//한 화면에 보여줄 레코드의 수
+	public static int pageSIZE=10;
+	
+	public List<BoardVO> findAll(HashMap<String, Object> map){
+		totalRecord = DBManager.getTotalRecord();
+		totalPage = (int)Math.ceil(totalRecord/(double)pageSIZE); 
+		
+		return DBManager.findAll(map);
 	}
 	
 	public int insert(BoardVO b) {
@@ -41,4 +51,5 @@ public class BoardDAO {
 	public int delete(HashMap<String, Object> map) {
 		return DBManager.delete(map);
 	}
+	
 }

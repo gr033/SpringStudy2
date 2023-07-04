@@ -32,6 +32,9 @@
 				<td>${b.writer }</td>
 			</tr>
 			</c:forEach>
-	</table>
+	</table><br>
+	<c:forEach var="i" begin="1" end="${totalPage }">
+		<a href="listBoard?pageNUM=${i }">${i }</a>&nbsp;
+	</c:forEach>
 </body>
 </html>
