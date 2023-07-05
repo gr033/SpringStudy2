@@ -7,6 +7,7 @@
 <typeAliases>
 	<typeAlias type="com.example.demo.vo.BoardVO" alias="boardVO"/>
 	<typeAlias type="com.example.demo.vo.MemberVO" alias="memberVO"/>
+	<typeAlias type="com.example.demo.vo.EmpVO" alias="empVO"/>
 </typeAliases>
 
   <environments default="development">
@@ -23,5 +24,6 @@
   <mappers>
     <mapper resource="com/example/demo/db/boardMapper.xml"/>
     <mapper resource="com/example/demo/db/memberMapper.xml"/>
+	<mapper resource="com/example/demo/db/empMapper.xml"/>
   </mappers>
 </configuration>

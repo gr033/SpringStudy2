@@ -10,6 +10,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import com.example.demo.vo.BoardVO;
+import com.example.demo.vo.EmpVO;
 import com.example.demo.vo.MemberVO;
 
 public class DBManager {
@@ -23,6 +24,14 @@ public class DBManager {
 			// TODO: handle exception
 			System.out.println("DBManager error: "+e.getMessage());
 		}
+	}
+	
+	public static List<EmpVO> findAllEmp(){
+		List<EmpVO> list = null;
+		SqlSession session = sqlSessionFactory.openSession();
+		list = session.selectList("emp.findAll");
+		session.close();
+		return list;
 	}
 	
 	public static boolean isMember(HashMap<String, Object> map) {

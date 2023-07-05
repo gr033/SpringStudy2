@@ -15,6 +15,7 @@ import com.example.demo.dao.MemberDAO;
 import com.example.demo.vo.MemberVO;
 
 import jakarta.servlet.http.HttpSession;
+import kr.co.youiwe.webservice.BitSms;
 import lombok.Setter;
 
 @Controller
@@ -58,6 +59,43 @@ public class MemberController {
 			mav.setViewName("error");
 		}
 		return mav;
+	}
+	
+	@GetMapping("/validCheck")
+	@ResponseBody
+	public String validCheck(String to, String authType) {
+		String data = "";
+		int dat = (int)(Math.random() * 8999) + 1000;
+		data =Integer.toString(dat);
+		System.out.println(data);
+		if(authType.equals("email")) {
+			SimpleMailMessage mailMessage = new SimpleMailMessage();
+			mailMessage.setFrom("yuri98834@gmail.com");
+			mailMessage.setTo(to);
+			mailMessage.setSubject("이메일 인증번호");
+			mailMessage.setText("이메일 인증번호: "+data);
+			try {
+				mailsender.send(mailMessage);
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println("validEmail error: "+e.getMessage());
+			}
+		}else if(authType.equals("phone")) {
+			BitSms.sendMsg("01025598279", to, "인증번호: " + data);
+		}
+		return data;
+	}
+	
+	@GetMapping("/validPhone")
+	@ResponseBody
+	public String validPhone(String phone) {
+		String data = "";
+		int dat = (int)(Math.random() * 8999) + 1000;
+		data =Integer.toString(dat);
+		System.out.println(data);
+		String from = "01025598279";
+		BitSms.sendMsg(from, phone, "인증번호: " + data);
+		return data;
 	}
 	
 	@GetMapping("/validEmail")

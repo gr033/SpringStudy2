@@ -18,26 +18,51 @@
 $(function(){
 	var check;
 	var userNUM;
-	$("#btnCheckEmail").click(function(){
+	
+	var to;
+	var authType;
+	
+	$("#radio_phone").click(function(){
+		$("#span_auth").html("휴대폰 번호 : ");
+		authType="phone";
+	})
+	
+	$("#radio_email").click(function(){
+		$("#span_auth").html("이메일 : ");
+		authType="email";
+	})
+	
+	$("#btnCheck").click(function(){
+		to = $("#to").val();
 		var data = {
-			email: $("#checkEmail").val()
+				to : to,
+				authType : authType
+				
 		};
 		$.ajax({
-			url: "validEmail",
+			url: "validCheck",
 			data: data,
 			success: function(n){
 				console.log(n);
 				$("#box_check").css("display", "block");
+				$("#box_phone").css("display", "block");
 				check = n;
 			}
 		})
 	});
 	
-	$("#btnConfirmEmail").click(function(){
+	$("#btnConfirm").click(function(){
 		userNUM = $("#checkNUM").val();
 		if(userNUM == check){
 			$("#box_insert").css("display", "block");
-			$("#email").val($("#checkEmail").val());
+			
+			if(authType == "phone"){
+				$("#phone").val(to);
+				$("#phone").attr("readonly", "readonly");
+			}else{
+				$("#email").val(to);
+				$("#email").attr("readonly", "readonly");
+			}
 		}else{
 			alert("인증번호를 다시 입력해주세요.");
 		}
@@ -47,23 +72,27 @@ $(function(){
 </head>
 <body>
 	<h2>회원가입</h2>
-		<div id="box_email">
-		이메일: <input type="email" name="checkEmail" id="checkEmail" placeholder="example@gmail.com">
-		<button id="btnCheckEmail">인증</button><br>
+		<div id="box_phone">
+			<input type="radio" id="radio_phone">문자 인증
+			<input type="radio" id="radio_email">이메일 인증
+			<br>
+			<span id="span_auth">휴대폰 번호 : </span><input type="tel" name="to" id="to">
+			<button id="btnCheck">인증</button><br>
 		</div>
 	
 		<div id="box_check">
 			인증번호 입력: <input type="text" name="checkNUM" id="checkNUM">
-			<button id="btnConfirmEmail">확인</button>
+			<button id="btnConfirm">확인</button>
 		</div>
 		<div id="box_insert">
-		<form action="join" method="post">
-				아이디: <input type="text" name="id"><br> 
-				암호: <input type="password" name="pwd"><br>
-				이름: <input type="text" name="name"><br>
-				이메일: <input type="email" name="email" id="email" readonly="readonly"><br>
-				<input type="submit" value="가입">
-		</form>
+			<form action="join" method="post">
+					아이디: <input type="text" name="id"><br> 
+					암호: <input type="password" name="pwd"><br>
+					이름: <input type="text" name="name"><br>
+					이메일: <input type="email" name="email" id="email"><br>
+					핸드폰 번호: <input type="tel" name="phone" id="phone"><br>
+					<input type="submit" value="가입">
+			</form>
 		</div>
 </body>
 </html>
