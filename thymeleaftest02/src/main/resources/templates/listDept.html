@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	table>tr>td>li>a
+	<h2>부서목록</h2>
+	<hr>
+	<table border="1">
+		<tr>s
+			<th>부서번호</th>
+			<th>부서명</th>
+			<th>부서위치</th>
+		</tr>
+		<tr th:each="d:${list}">
+			<td th:text="${d.dno}"></td>
+			<td th:text="${d.dname}"></td>
+			<td th:text="${d.dloc}"></td>
+		</tr>
+	</table>
+</body>
+</html>
