@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script>
+	$(function(){
+		$(".delete").click(function(){
+			if(confirm('정말로 삭제하시겠습니까?')==false){
+				event.preventDefault();
+			}
+		})
+	})
+	
+</script>
+</head>
+<body>
+	<h2>도서 목록</h2>
+	<hr>
+	<a href="/goods/insert">도서 추가</a>
+	<table border="1" width="80%">
+		<tr>
+			<td>도서번호</td>
+			<td>도서이름</td>
+			<td>출판사명</td>
+			<td>가격</td>
+			<td>Action</td>
+		</tr>
+		<tr th:each="b:${list}">
+			<td th:text="${b.bookid}"></td>
+			<td th:text="${b.bookname}"></td>
+			<td th:text="${b.publisher}"></td>
+			<td th:text="${b.price}"></td>
+			<td>
+				<a th:href="@{'/book/update/'+${b.bookid}}">수정</a>
+				<a class="delete" th:href="@{'/book/delete/'+${b.bookid}}" >삭제</a>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

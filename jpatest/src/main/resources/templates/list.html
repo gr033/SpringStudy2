@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>상품목록</h2>
+	<hr>
+	<table border="1">
+		<tr>
+			<td>상품번호</td>
+			<td>상품명</td>
+			<td>가격</td>
+			<td>Action</td>
+		</tr>
+		<tr th:each = "goods:${list}">
+			<td th:text="${goods.no}"></td>
+			<td th:text="${goods.name}"></td>
+			<td th:text="${goods.price}"></td>
+			<td th:text="Action"></td>
+		</tr>
+	</table>
+</body>
+</html>
