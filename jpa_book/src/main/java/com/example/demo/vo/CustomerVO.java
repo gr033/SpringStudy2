@@ -11,18 +11,15 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name="book")
-public class BookVO {
+@Table(name="customer")
+public class CustomerVO {
 	@Id
-	private int bookid;
-	private String bookname;
-	private String publisher;
-	private int price;
+	private int custid;
+	private String name;
+	private String address;
+	private String phone;
+	private String fname;
 	
-	//eager: 즉시 읽어옴 lazy: 나중에 읽어옴 
-	@OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
 	private List<OrdersVO> orders;
-	
-	
-	
 }

@@ -13,4 +13,12 @@ public interface BookDAO extends JpaRepository<BookVO, Integer> {
 	@Query("select b from BookVO b order by b.bookname")
 	public List<BookVO> selectAll();
 	
+	public List<BookVO> findAllByOrderByBookname();
+	
+	public List<BookVO> findByBookidLikeOrderByPriceDesc(int bookid);
+	public List<BookVO> findByBooknameLikeOrderByPriceDesc(String bookname);
+	public List<BookVO> findByPublisherLikeOrderByPriceDesc(String publisher);
+	public List<BookVO> findByPriceLikeOrderByPriceDesc(int Price);
+	
+	
 }

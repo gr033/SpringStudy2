@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script>
+	$(function(){
+		$(".delete").click(function(){
+			if(confirm('정말로 삭제하시겠습니까?')==false){
+				event.preventDefault();
+			}
+		});
+	});
+</script>
+</head>
+<body>
+	<h2>회원 목록</h2>
+	<hr>
+	<a href="/customer/insert">회원등록</a><br>
+	<table border="1">
+		<tr>
+			<td>회원번호</td>
+			<td>이름</td>
+			<td>주소</td>
+			<td>전화번호</td>
+			<td>사진이름</td>
+			<td>Action</td>
+		</tr>
+		<tr th:each="c:${list}">
+			<td th:text="${c.custid}"></td>
+			<td th:text="${c.name}"></td>
+			<td th:text="${c.address}"></td>
+			<td th:text="${c.phone}"></td>
+			<td th:text="${c.fname}"></td>
+			<td>
+				<a th:href="@{'/customer/update/'+${c.custid}}">수정</a>
+				<a th:href="@{'/customer/delete/'+${c.custid}}" class="delete">삭제</a>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.service.BookService;
@@ -26,7 +27,6 @@ public class BookController {
 	
 	@GetMapping("/book/insert")
 	public void insert() {
-		
 	}
 
 	@PostMapping("/book/save")
@@ -36,9 +36,11 @@ public class BookController {
 		return mav;
 	}
 	
-	@GetMapping("/book/list")
-	public void list(Model model) {
-		model.addAttribute("list", bs.findAll());
+	@GetMapping(value = {"/book/list/{column}/{keyword}", "/book/list", "book/list/{column}/"})
+	public ModelAndView list(@PathVariable(required = false) String column, @PathVariable(required = false) String keyword) {
+		ModelAndView mav = new ModelAndView("/book/list");
+		mav.addObject("list", bs.findAll(column, keyword));
+		return mav;
 	}
 	
 	@GetMapping("/book/update/{bookid}")
@@ -50,7 +52,6 @@ public class BookController {
 	
 	@GetMapping("/book/delete/{bookid}")
 	public ModelAndView delete(@PathVariable int bookid) {
-		System.out.println(bookid);
 		ModelAndView mav = new ModelAndView("redirect:/book/list");
 		bs.deleteById(bookid);
 		return mav;

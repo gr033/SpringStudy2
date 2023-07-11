@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>회원 정보 수정</h2>
+	<hr>
+	<form action="/customer/save" method="post">
+		<input type="hidden" name="custid" th:value="${c.custid}">
+		회원이름: <input type="text" name="name" th:value="${c.name}"><br>
+		회원주소: <input type="text" name="address" th:value="${c.address}"><br>
+		전화번호: <input type="text" name="phone" th:value="${c.phone}"><br>
+		회원사진: <inpyt type="text" name="fname" th:value="${c.fname}"><br>
+		<input type="submit" value="수정"><br>
+		<input type="reset" value="초기화">
+	</form>
+</body>
+</html>
