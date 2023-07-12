@@ -17,7 +17,7 @@ public class BookVO {
 	private int bookid;
 	private String bookname;
 	private String publisher;
-	private int price;
+	private Integer price;
 	
 	//eager: 즉시 읽어옴 lazy: 나중에 읽어옴 
 	@OneToMany(mappedBy = "book", fetch = FetchType.EAGER)

@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>주문목록</h2>
+	
+	<form action="/orders/list2" method="post">
+		<select name="cname" >
+			<option value="Name">고객이름</option>			
+			<option value="Bookname">도서명</option>			
+		</select>
+		:
+		<input type="search" name="keyword"/>
+		<input type="submit" value="검색"/>
+	</form>
+	
+	<hr />
+	<table>
+		<tr>
+			<td><a href="/orders/list2?sname=Orderid">주문번호</a></td>
+			<td><a href="/orders/list2?sname=Name">고객이름</a></td>
+			<td><a href="/orders/list2?sname=Bookname">도서이름</a></td>
+			<td><a href="/orders/list2?sname=Price">도서가격</a></td>
+			<td><a href="/orders/list2?sname=Saleprice">주문가격</a></td>
+			<td><a href="/orders/list2?sname=Orderdate">주문일</a></td>
+		</tr>
+		<tr th:each="o:${list}">
+			<td th:text="${o.orderid}"></td>
+			<td th:text="${o.name}"></td>
+			<td th:text="${o.bookname}"></td>
+			<td th:text="${o.price}"></td>
+			<td th:text="${o.saleprice}"></td>
+			<td th:text="${o.orderdate}"></td>
+		</tr>
+	</table>
+</body>
+</html>

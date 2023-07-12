@@ -2,11 +2,9 @@ package com.example.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.service.BookService;
@@ -25,10 +23,23 @@ public class BookController {
 		return "index";
 	}
 	
-	@GetMapping("/book/insert")
-	public void insert() {
-	}
+	@GetMapping(value = {"/book/list/{cname}/{keyword}",
+			"/book/list/{cname}/",
+			"/book/list"})
+	public ModelAndView list(
+			@PathVariable(required = false) String cname,
+			@PathVariable(required = false) String keyword) {
+		ModelAndView mav = 
+				new ModelAndView("/book/list");
+		mav.addObject("list", bs.findAll(cname,keyword));
+		return mav;
 
+	}
+	
+	@GetMapping("/book/insert")
+	public void insert() {		
+	}
+	
 	@PostMapping("/book/save")
 	public ModelAndView save(BookVO b) {
 		ModelAndView mav = new ModelAndView("redirect:/book/list");
@@ -36,16 +47,10 @@ public class BookController {
 		return mav;
 	}
 	
-	@GetMapping(value = {"/book/list/{column}/{keyword}", "/book/list", "book/list/{column}/"})
-	public ModelAndView list(@PathVariable(required = false) String column, @PathVariable(required = false) String keyword) {
-		ModelAndView mav = new ModelAndView("/book/list");
-		mav.addObject("list", bs.findAll(column, keyword));
-		return mav;
-	}
-	
 	@GetMapping("/book/update/{bookid}")
 	public ModelAndView update(@PathVariable int bookid) {
 		ModelAndView mav = new ModelAndView("/book/update");
+		
 		mav.addObject("b", bs.getOne(bookid));
 		return mav;
 	}
@@ -56,5 +61,4 @@ public class BookController {
 		bs.deleteById(bookid);
 		return mav;
 	}
-	
 }
