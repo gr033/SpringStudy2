@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.io.File;
 import java.io.FileOutputStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import com.example.demo.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Setter;
 
-
 @Controller
 @Setter
 public class BoardController {
@@ -26,24 +26,20 @@ public class BoardController {
 	public int totalRecord;
 	public int totalPage;
 	
-	@Autowired 
+	@Autowired
 	private BoardService bs;
-	
 	@GetMapping("/board/list/{pageNUM}")
-	public String list(Model model, @PathVariable("pageNUM") int pageNUM) {
+	public String list(Model model, 
+			@PathVariable("pageNUM")  int pageNUM) {		
 		totalRecord = bs.getTotalRecord();
 		totalPage = (int)Math.ceil(totalRecord/(double)pageSIZE);
-		
-		System.out.println("totalRecord: "+totalRecord);
-		System.out.println("totalPage: "+totalPage);
-		System.out.println("현재 페이지: "+pageNUM);
-		
+		System.out.println("전체레코드수:"+totalRecord);
+		System.out.println("전체페이지수:"+totalPage);
+		System.out.println("현재페이지:"+pageNUM);
 		int start = (pageNUM-1)*pageSIZE+1;
 		int end = start+pageSIZE-1;
-		
-		System.out.println("start: "+start);
-		System.out.println("end: "+end);
-		
+		System.out.println("start:"+start);
+		System.out.println("end:"+end);
 		model.addAttribute("list", bs.findAll(start, end));
 		model.addAttribute("totalPage", totalPage);
 		return "/board/list";
@@ -51,35 +47,47 @@ public class BoardController {
 	
 	@GetMapping("/board/detail/{no}")
 	public ModelAndView detail(@PathVariable("no") int no) {
-		System.out.println("글번호: "+no);
+		System.out.println("글번호:"+no);
 		ModelAndView mav = new ModelAndView("/board/detail");
 		mav.addObject("b", bs.findById(no));
 		return mav;
-	}
-
-	@PostMapping("/board/insert")
-	public ModelAndView insert(Board b, HttpServletRequest request) {
 		
-		String path = request.getServletContext().getRealPath("/images");
-		System.out.println("path: "+path);
+	}
+	
+	@GetMapping("/board/insert/{no}")
+	public String insert(Model model, 
+			@PathVariable("no") int no) {
+		System.out.println("insert 컨트롤러 동작함.");
+		model.addAttribute("no", no);
+		return "/board/insert";
+	}
+	
+	
+	@PostMapping("/board/insert")
+	public ModelAndView insert(Board b, HttpServletRequest request) {		
+		String path = request.getServletContext().getRealPath("/images");		
+		System.out.println("path:"+path);
 		String fname = null;
 		MultipartFile uploadFile = b.getUploadFile();
 		fname = uploadFile.getOriginalFilename();
 		if(fname != null && !fname.equals("")) {
 			try {
-				FileOutputStream fos = new FileOutputStream(path+"/"+fname);
+				FileOutputStream fos = new FileOutputStream(path+"/"+fname);				
 				FileCopyUtils.copy(uploadFile.getBytes(), fos);
 				fos.close();
-			} catch (Exception e) {
-				// TODO: handle exception
-				System.out.println("uploadfile error: "+e.getMessage());
+			}catch (Exception e) {
+				System.out.println("예외발생:"+e.getMessage());
 			}
 		}else {
 			fname = "";
 		}
+		
 		b.setFname(fname);
 		
+		
 		ModelAndView mav = new ModelAndView("redirect:/board/list/1");
+		
+		//일단 새글이라고 봅니다.
 		int no = bs.getNextNo();
 		int b_ref = no;
 		int b_level = 0;
@@ -96,7 +104,7 @@ public class BoardController {
 			b_level++;
 			b_step++;
 		}
-		
+				
 		b.setNo(no);
 		b.setB_ref(b_ref);
 		b.setB_level(b_level);
@@ -105,12 +113,25 @@ public class BoardController {
 		bs.insert(b);
 		return mav;
 	}
-
-	@GetMapping("board/insert/{no}")
-	public String insert(Model model, @PathVariable("no") int no) {
+	
+	@GetMapping("/board/delete/{no}")
+	public String delete(@PathVariable("no") int no, Model model) {
 		model.addAttribute("no", no);
-		return "/board/insert";
+		return "/board/delete";
 	}
 	
+	@PostMapping("/board/delete")
+	public ModelAndView delete(int no, String pwd, HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView("redirect:/board/list/1");
+		String path = request.getServletContext().getRealPath("images");
+		String fname = bs.findById(no).getFname();
+		if(bs.deleteBoard(no, pwd)==1) {
+			if(fname != null && !fname.equals("")) {
+				File file = new File(path+"/"+fname);
+				file.delete();
+			}
+		}
+		return mav;
+	}
 	
 }

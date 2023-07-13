@@ -13,6 +13,10 @@ public class BoardService {
 	@Autowired
 	private BoardDAO dao;
 	
+	public int deleteBoard(int no, String pwd) {
+		return dao.deleteBoard(no, pwd);
+	}
+	
 	//전체 레코드 수를 반환하는 메소드정의
 	public int getTotalRecord() {
 		return (int)dao.count();
