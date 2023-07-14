@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	
+<h2>게시판</h2>
+<a href="/board/insert/0">글쓰기</a>
+<br />
+<table>
+	<tr>
+		<td>글번호</td>
+		<td>제목</td>
+		<td>작성자</td>
+		<td>등록</td>
+	</tr>
+	<tr th:each="b:${list}">
+		<td th:text="${b.no}"></td>
+		<td>
+			<span th:if="${b.b_level>0}">
+				<span th:each="i:${#numbers.sequence(1, b.b_level)}">&nbsp;&nbsp;</span>
+				-->
+			</span>
+			<a th:href="@{'/board/detail/'+${b.no}}" th:text="${b.title}"></a>
+		</td>
+		<td th:text="${b.writer}"></td>
+		<td th:text="${b.regdate}"></td>
+	</tr>
+</table>
+<hr />
+	<th:block th:each="i:${#numbers.sequence(1,totalPage)}">
+		<a th:href="@{'/board/list/'+${i}}" th:text="${i}"></a>		
+	</th:block>
+</body>
+</html>

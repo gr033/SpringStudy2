@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<!--
+<span th:text="${session.id}+'님 로그인 하였습니다.'"></span>
+	-->
+<span th:text="${session.user.id}+'('+${session.user.name}+')님 로그인 하였습니다.'"></span>
+<h2>게시판</h2>
+<br />
+	<a href="/board/insert/0">글쓰기</a><br>
+	<a href="/board/list/1">모두보기</a><br>
+	<a th:href="@{'/board/list/1/'+${session.user.id}}">내 글</a>
+	<br/>
+<table>
+	<tr>
+		<td>글번호</td>
+		<td>제목</td>
+		<td>작성자</td>
+		<td>등록</td>
+	</tr>
+	<tr th:each="b:${list}">
+		<td th:text="${b.no}"></td>
+		<td>
+			<span th:if="${b.b_level>0}">
+				<span th:each="i:${#numbers.sequence(1, b.b_level)}">&nbsp;&nbsp;</span>
+				-->
+			</span>
+			<a th:href="@{'/board/detail/'+${b.no}}" th:text="${b.title}"></a>
+		</td>
+		<td>
+			<a th:href="@{'/board/list/1/'+${b.member.id}}" th:text="${b.member.id}"></a>
+		</td>
+		<td th:text="${b.regdate}"></td>
+	</tr>
+</table>
+<hr />
+	<th:block th:each="i:${#numbers.sequence(1,totalPage)}">
+		<a th:href="@{'/board/list/'+${i}+'/'+${id}}" th:text="${i}"></a>
+	</th:block>
+	<br>
+		
+		<br/>
+		<th:block th:if="${session.user.role}=='admin'">
+			<a href="/admin/index">관리자메뉴</a>
+		</th:block>
+</body>
+</html>
