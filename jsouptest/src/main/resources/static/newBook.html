@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+</head>
+<body>
+	마포 평생 학습관 잔여좌석: <span id="restSeat"></span>
+	<hr>
+	<h2>새로운 도서정보</h2>
+	<ul id="list"></ul>
+<script type="text/javascript">
+	$(function(){
+		$.ajax({
+			url : '/newBook',
+			success: function(data){
+				$.each(data, function(data){
+					let title = this.title;
+					let link = this.link;
+					let li = $('<li></li>');
+					let a = $('<a></a>').attr("href",link);
+					a.html(title);
+					li.append(a);
+					$("#list").append(li);
+				})
+			}
+		})
+		setInterval(function(){
+			$.ajax({
+				url: '/restSeat',
+				success: function(data){
+					console.log(data);
+					$("#restSeat").html(data);
+				}
+			})
+		}, 5000)
+	})
+</script>
+</body>
+</html>
