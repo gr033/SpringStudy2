@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script>
+	/*
+	function pro(){
+		alert("OK");
+	}
+	*/
+	/*
+	var pro = () => {
+		alert("OK");
+	}
+	*/
+	$(function(){
+		var n = 0;
+		setInterval(()=>{
+			
+			n++;
+			$("#crt").html(n);
+			if(n == 10){
+				n = 0;
+			}
+		}, 1000);
+		
+	/*
+		setInterval(function(){
+			n++;
+			$("#crt").html(n);
+			if(n == 10){
+				n = 0;
+			}
+		}, 1000);
+	*/
+	})
+	/*
+	pro();
+	*/
+</script>
+</head>
+<body>
+	<h2 id="crt"></h2>
+</body>
+</html>

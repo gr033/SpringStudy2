@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+
+    <title>Hello React!</title>
+
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+      var isInit = false;
+      var selRow;
+
+      function callAjax(url, data){
+        const axiosConfig = {
+          headers:{
+            "Content-Type":"application/x-www-form-urlencoded"
+          }
+        }
+        axios.post(url, data, axiosConfig );
+        location.reload()
+      }
+
+      const TableHeader = ()=>{
+        return (
+          <thead>
+            <tr>
+              <th>부서번호</th>  
+              <th>부서명</th>  
+              <th>부서위치</th>  
+            </tr>
+          </thead>
+        );
+      }
+
+      const TableBody = (props)=>{
+        const rows = props.listData.map((row, index)=>{
+          return (
+            <tr key={index} onClick={(e)=>props.sel(row,e)}>
+              <td>{row.DNO}</td>
+              <td>{row.DNAME}</td>
+              <td>{row.DLOC}</td>
+            </tr>
+          )
+        });
+        return <tbody>{rows}</tbody>
+      }
+
+      class Table extends React.Component{        
+        sel = (row)=>{
+          selRow = row
+          isInit = true
+          console.log("row:"+row);
+          document.querySelector("#DNO").value = row.DNO;
+          document.querySelector("#DNAME").value = row.DNAME;
+          document.querySelector("#DLOC").value = row.DLOC;
+        }
+
+        render(){
+          const {listData} = this.props
+          return (
+            <table>
+              <TableHeader/>
+              <TableBody listData={listData} sel={this.sel}/>
+            </table>
+          )
+        }
+      }
+
+      class Form extends React.Component{
+        initialState = {
+          DNO:'',
+          DNAME:'',
+          DLOC:''
+        }
+
+        state = this.initialState;
+
+        handleChange = (event) => {
+          if(isInit){
+            this.setState(selRow);
+            isInit=false;
+          }
+
+          const { name, value } = event.target
+
+          this.setState({
+            [name]: value,
+          })
+      }
+
+        submitForm = (event)=>{
+          this.props.handleSubmit(event, this.state)
+          this.setState(this.initialState)
+        }
+
+        render(){
+          const {DNO,DNAME, DLOC} = this.state
+          return (
+            <form>
+              <label htmlFor="DNO">부서번호</label><br/>
+              <input type="text" name="DNO" id="DNO" value={DNO} onChange={this.handleChange}/><br/>
+
+              <label htmlFor="DNAME">부서명</label><br/>
+              <input type="text" name="DNAME" id="DNAME" value={DNAME} onChange={this.handleChange}/><br/>
+
+              <label htmlFor="DLOC">부서위치</label><br/>
+              <input type="text" name="DLOC" id="DLOC" value={DLOC} onChange={this.handleChange}/><br/>
+
+              <input type="button" value="등록" url="insertDept" onClick={this.submitForm}/>
+              <input type="button" value="수정" url="updateDept" onClick={this.submitForm}/>
+              <input type="button" value="삭제" url="deleteDept" onClick={this.submitForm}/>
+            </form>
+          );
+        }
+      }
+
+       axios.get("/listDept").then(function(res){
+          console.log(res.data);
+          class App extends React.Component{
+            render(){
+              const list = res.data;
+              return (
+                <div className="container">
+                  <Table listData={list}/>
+                  <Form handleSubmit={this.handleSubmit}/>
+                </div>
+              )
+            }
+            
+            handleSubmit = (event, data)=>{
+              const url = event.target.getAttribute("url");
+              console.log("url:"+url);
+              console.log("data:"+data);
+              callAjax(url, data);
+              return false;
+            }
+
+          }
+          ReactDOM.render(<App />, document.getElementById('root'))
+       });
+  
+    </script>
+  </body>
+</html>

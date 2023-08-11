@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- 외부 db연결 파일 가져오기 -->
+	<!-- 경로 가져올 파일 우클릭, properties에서 경로 com부터 긁어오기 -->
+	<properties resource="com/example/demo/db/db.properties"/>
+	
+	<!-- 클래스들의 전체 경로와 이름에 별칭 만들기 -->
+	<typeAliases>
+		<typeAlias type="com.example.demo.vo.MemberVO" alias="memberVO"/>
+	</typeAliases>
+	
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="com/example/demo/db/memberMapper.xml"/>
+  </mappers>
+</configuration>

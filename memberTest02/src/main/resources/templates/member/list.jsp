@@ -1,0 +1,26 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/coinsert.jsp
+list.jspre" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>멤버 목록</h2>
+		<table border="1">
+			<tr>
+				<td>아이디</td>
+				<td>이름</td>
+			</tr>
+			<c:forEach var="m" items="${list }">
+				<tr>
+					<td>${m.id }</td>
+					<td>${m.name }</td>
+				</tr>
+			</c:forEach>
+		</table>
+</body>
+</html>
